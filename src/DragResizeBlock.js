@@ -208,6 +208,20 @@ export class DragResizeBlock extends Component {
     }
   }
 
+    /**
+   * Handle long press event.
+   * @param {Event} event - Press event.
+   */
+  onLongPress = (event) => {
+    const {
+      onLongPress,
+    } = this.props;
+
+    if (onLongPress !== null) {
+      onLongPress(event);
+    }
+  }
+
   /**
    * Handle resize start event.
    * @param {Array} coord - Press coordinate [x,y].
@@ -663,7 +677,7 @@ export class DragResizeBlock extends Component {
         isSelected: false,
       };
     });
-
+    this.state.x = Math.round(this.state.x / RFValue(10)) * RFValue(10);
     if (onDragEnd !== null) {
       onDragEnd([
         this.state.x,
@@ -730,8 +744,9 @@ export class DragResizeBlock extends Component {
             zIndex: isSelected ? zIndex + 1 : zIndex,
           }}
         >
-          <TouchableWithoutFeedback
+        <TouchableWithoutFeedback
             onPress={this.onPress}
+            onLongPress={this.onLongPress}
           >
             <View
               style={{
@@ -784,7 +799,7 @@ DragResizeBlock.defaultProps = {
     CONNECTOR_MIDDLE_LEFT,
     CONNECTOR_CENTER,
   ],
-
+  onLongPress: null,
   onPress: null,
   onDragStart: null,
   onDrag: null,
@@ -817,7 +832,7 @@ DragResizeBlock.propTypes = {
   isDraggable: PropTypes.bool,
   isResizable: PropTypes.bool,
   connectors: PropTypes.array,
-
+  onLongPress: PropTypes.func,
   onPress: PropTypes.func,
   onDragStart: PropTypes.func,
   onDrag: PropTypes.func,
